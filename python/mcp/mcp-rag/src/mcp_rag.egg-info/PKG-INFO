@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: mcp-rag
+Version: 0.1.0
+Summary: MCP server with RAG: HuggingFace embeddings, FAISS vector DB, and Groq LLM
+Author-email: Your Name <you@example.com>
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: fastmcp
+Requires-Dist: sentence-transformers
+Requires-Dist: faiss-cpu
+Requires-Dist: groq
+Requires-Dist: python-dotenv
+
+# RAG MCP Server (fastmcp + Groq + HuggingFace)
+
+This project demonstrates a production-ready **Retrieval-Augmented Generation (RAG)** pipeline wrapped as an **MCP server**.
+
+## Features
+- **Vector DB**: In-memory FAISS
+- **Embeddings**: HuggingFace `all-MiniLM-L6-v2`
+- **LLM**: Groq LLaMA3
+- **MCP Tools**:
+  - `add_details_to_vector_db`
+  - `retrieve_from_vector_db`
+  - `transform_with_groq_tool`
+
+## Install
+```bash
+git clone <repo>
+cd mcp-rag
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .

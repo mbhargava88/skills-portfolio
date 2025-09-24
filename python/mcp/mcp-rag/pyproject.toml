@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-rag"
+version = "0.1.0"
+description = "MCP server with RAG: HuggingFace embeddings, FAISS vector DB, and Groq LLM"
+authors = [
+    { name = "Your Name", email = "you@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+    "fastmcp",
+    "sentence-transformers",
+    "faiss-cpu",
+    "groq",
+    "python-dotenv"
+]
+
+[project.scripts]
+mcp-rag = "mcp_rag.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
