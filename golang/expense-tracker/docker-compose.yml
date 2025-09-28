@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: expense-tracker-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend-http:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.http
+    container_name: expense-tracker-backend-http
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      DB_DRIVER: postgres
+      DB_SOURCE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      HTTP_SERVER_ADDRESS: 0.0.0.0:8080
+      JWT_SECRET: ${JWT_SECRET}
+
+  backend-grpc:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.grpc
+    container_name: expense-tracker-backend-grpc
+    depends_on:
+      - postgres
+    ports:
+      - "9090:9090"
+    environment:
+      DB_DRIVER: postgres
+      DB_SOURCE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      GRPC_SERVER_ADDRESS: 0.0.0.0:9090
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: expense-tracker-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend-http
+
+volumes:
+  postgres_data:

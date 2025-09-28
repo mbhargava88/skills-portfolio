@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package expenses;
+
+option go_package = "expense-tracker/backend/internal/infrastructure/grpc/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service ExpenseService {
+  rpc CreateExpense(CreateExpenseRequest) returns (CreateExpenseResponse);
+  rpc GetExpenses(GetExpensesRequest) returns (GetExpensesResponse);
+}
+
+message Expense {
+  string id = 1;
+  string user_id = 2;
+  string category_id = 3;
+  double amount = 4;
+  string description = 5;
+  google.protobuf.Timestamp date = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message CreateExpenseRequest {
+  string user_id = 1;
+  string category_id = 2;
+  double amount = 3;
+  string description = 4;
+  google.protobuf.Timestamp date = 5;
+}
+
+message CreateExpenseResponse {
+  Expense expense = 1;
+}
+
+message GetExpensesRequest {
+  string user_id = 1;
+}
+
+message GetExpensesResponse {
+  repeated Expense expenses = 1;
+}
