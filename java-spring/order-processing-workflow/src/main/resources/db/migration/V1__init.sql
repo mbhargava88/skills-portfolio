@@ -1,0 +1,6 @@
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
