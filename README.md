@@ -6,16 +6,13 @@ Each project is self-contained and demonstrates different concepts.
 ## Projects
 
 ### Python
-- [flask-blog](python/flask-blog) → Fullstack web app with Flask
-- [numpy-utils](python/numpy-utils) → Data science helper functions
-- [ml-secret-proj](python/ml-secret-proj) → ML demo
+- [Chatbot](python/agentic-chatbot) → Agentic AI Chatbot
+- [mcp-rag](python/mcp-rag) → Retrieval Augmented Generation (RAG)
 
 ### Golang
-- [mcp-rag](golang/mcp-rag) → Retrieval Augmented Generation (RAG) demo
-- [otel-demo](golang/otel-demo) → OpenTelemetry instrumentation
-- [secret-manager](golang/secret-manager) → Secret management with Vault + K8s
+- [expense-tracker](golang/expense-tracker) → In Progress
 
-### Java
+### Java/Spring
 - [spring-rest](java/spring-rest) → REST API with Spring Boot
-- [order-service](java/order-service) → Order processing with Clean Architecture
+- [order-workflow-service](java-spring/order-processing-workflow) → Order processing & workflow handling with Clean Architecture
 
