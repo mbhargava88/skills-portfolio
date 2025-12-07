@@ -7,7 +7,7 @@ Each project is self-contained and demonstrates different concepts.
 
 ### Python
 - [Chatbot](python/agentic-chatbot) → Agentic AI Chatbot
-- [mcp-rag](python/mcp-rag) → Retrieval Augmented Generation (RAG)
+- [mcp-rag](python/mcp/mcp-rag) → Retrieval Augmented Generation (RAG)
 
 ### Golang
 - [expense-tracker](golang/expense-tracker) → In Progress
