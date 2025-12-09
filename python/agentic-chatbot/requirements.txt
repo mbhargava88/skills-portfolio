@@ -1,0 +1,8 @@
+langgraph
+langgraph
+langgraph-sdk
+langgraph-prebuilt
+langgraph-checkpoint
+faiss-cpu
+streamlit
+tavily-python
