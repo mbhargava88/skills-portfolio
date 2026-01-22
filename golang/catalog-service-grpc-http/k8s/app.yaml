@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-app
+  template:
+    metadata:
+      labels:
+        app: catalog-app
+    spec:
+      containers:
+        - name: catalog-app
+          image: catalog-mgmt-app:latest
+          imagePullPolicy: Never # Use local image from minikube docker-env
+          env:
+            - name: DB_HOST
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "password"
+            - name: DB_NAME
+              value: "catalogs"
+            - name: DB_PORT
+              value: "5470"
+          ports:
+            - containerPort: 8080
+            - containerPort: 50051
+          # Add schema init via init container or rely on app to do it (app doesn't have migration logic). 
+          # For simplicity, we'll assume the app works, but we need the table.
+          # I will add an init container to create the table using psql if needed, 
+          # or I can execute a command after deploy.
+          # A better way is to make the app create the table on startup or use a migration tool.
+          # I will update main.go or repository to create table if not exists for simplicity in this demo.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-app
+spec:
+  type: NodePort
+  selector:
+    app: catalog-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 50051
+      targetPort: 50051
+      name: grpc

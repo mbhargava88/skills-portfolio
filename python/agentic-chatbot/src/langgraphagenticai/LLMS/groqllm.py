@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from langchain_groq import ChatGroq
+from groq import Groq
 
 
 class GroqLLM:
@@ -19,11 +19,8 @@ class GroqLLM:
             if not groq_model_name:
                 st.error("Groq Model selection is missing.")
                 return None
-
-            llm = ChatGroq(
-                model=groq_model_name,
-                api_key=groq_api_key
-            )
+            
+            self.client = Groq(api_key=groq_api_key)
+            return self.client
         except Exception as e:
             raise ValueError(f"Error Occurred with exception : {e} ")
-        return llm

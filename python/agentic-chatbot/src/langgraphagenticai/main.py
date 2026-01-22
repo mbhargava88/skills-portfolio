@@ -24,9 +24,9 @@ def load_langgraph_agentic_ai_ui():
         try:
             ## Configure the LLMs
             obj_llm_config=GroqLLM(user_controls=user_controls)
-            model=obj_llm_config.get_llm_model()
+            groq_client=obj_llm_config.get_llm_model()
 
-            if not model:
+            if not groq_client:
                 st.error("Error: LLM model could not be initialized")
                 return
             
