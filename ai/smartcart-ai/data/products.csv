@@ -1,0 +1,9 @@
+product_id,name,category,description,price
+P001,MacBook Pro,Laptop,High-end laptop with M3 chip,1999.99
+P002,Dell XPS 13,Laptop,Compact windows laptop,1299.99
+P003,iPhone 15,Smartphone,Latest Apple smartphone,999.99
+P004,Samsung Galaxy S24,Smartphone,Latest Samsung smartphone,899.99
+P005,Sony WH-1000XM5,Headphones,Noise cancelling headphones,349.99
+P006,AirPods Pro,Headphones,Wireless earbuds,249.99
+P007,Logitech MX Master 3S,Accessories,Wireless mouse,99.99
+P008,Keychron K2,Accessories,Mechanical keyboard,79.99
