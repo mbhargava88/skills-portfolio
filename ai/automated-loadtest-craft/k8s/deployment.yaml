@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: antigravity-load-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: antigravity-load-test
+  template:
+    metadata:
+      labels:
+        app: antigravity-load-test
+    spec:
+      containers:
+      - name: antigravity-load-test
+        image: antigravity-load-test:latest
+        imagePullPolicy: Never # For local minikube use
+        ports:
+        - containerPort: 8501
+        env:
+        - name: GRAFANA_URL
+          valueFrom:
+            configMapKeyRef:
+              name: antigravity-config
+              key: GRAFANA_URL
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: antigravity-secrets
+              key: GITHUB_TOKEN
+        - name: GROQ_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: antigravity-secrets
+              key: GROQ_API_KEY
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: antigravity-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: antigravity-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: S3_BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: antigravity-config
+              key: S3_BUCKET_NAME

@@ -1,0 +1,10 @@
+streamlit
+langgraph
+langchain
+langchain_groq
+pydantic
+httpx
+boto3
+pygithub
+python-dotenv
+pandas
