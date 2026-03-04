@@ -10,16 +10,34 @@ class GitHubClientImpl(GitHubClient):
             api_token = os.getenv("GITHUB_TOKEN")
         self.client = Github(api_token)
 
-    def fetch_repo(self, repo_name: str) -> RepoAnalysis:
+    def fetch_repo(self, repo_name: str, branch: str = None) -> RepoAnalysis:
         import re
-        # Handle full URLs like https://github.com/owner/repo
-        match = re.search(r'github\.com[:/]([^/]+/[^/]+?)(?:\.git|/)?$', repo_name)
-        if match:
-            repo_name = match.group(1)
+        
+        # Defaults
+        parsed_branch = "main"
+        folder_path = ""
+        
+        # Handle full URLs with branch and path like https://github.com/owner/repo/tree/branch/path
+        tree_match = re.search(r'github\.com[:/]([^/]+/[^/]+?)/tree/([^/]+)/(.*)$', repo_name)
+        if tree_match:
+            repo_name = tree_match.group(1)
+            parsed_branch = tree_match.group(2)
+            folder_path = tree_match.group(3)
+            if folder_path.endswith('/'):
+                folder_path = folder_path[:-1]
+        else:
+            # Handle standard full URLs like https://github.com/owner/repo
+            match = re.search(r'github\.com[:/]([^/]+/[^/]+?)(?:\.git|/)?$', repo_name)
+            if match:
+                repo_name = match.group(1)
+            
+        # Resolve Branch priority (Explicit parameter > Parsed URL Branch > 'main')
+        resolved_branch = branch if branch else parsed_branch
             
         try:
             repo = self.client.get_repo(repo_name)
-            contents = repo.get_contents("")
+            logging.info(f"Fetching repo: {repo_name}, branch: {resolved_branch}, path: {folder_path}")
+            contents = repo.get_contents(folder_path, ref=resolved_branch)
             file_tree = []
             
             # Simple BFS/recursive fetch to get file tree (limit depth for simplicity)
@@ -39,8 +57,9 @@ class GitHubClientImpl(GitHubClient):
                     file_tree.append(file_content.path)
                     if file_content.type == "dir" and len(file_tree) < 50: # arbitrary limit
                        try:
-                           queue.extend(repo.get_contents(file_content.path))
-                       except:
+                           queue.extend(repo.get_contents(file_content.path, ref=resolved_branch))
+                       except Exception as e:
+                           logging.warning(f"Failed to fetch content for {file_content.path}: {e}")
                            pass
 
             # Mocking analysis logic for now as 'relevant_code_snippets' requires intelligent search

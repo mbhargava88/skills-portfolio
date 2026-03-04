@@ -1,6 +1,6 @@
 # Agents Specification
 
-This document describes the architecture and agent responsibilities for the **Antigravity Load‑Testing Automation System**. It follows **DDD**, **Clean Architecture**, and a **StateGraph‑based orchestration** to automate generation of k6 load‑testing bundles using traffic data from Grafana, code analysis from GitHub, LLM‑generated scripts, and packaging to S3.
+This document describes the architecture and agent responsibilities for the **Load‑Testing Automation System**. It follows **DDD**, **Clean Architecture**, and a **StateGraph‑based orchestration** to automate generation of k6 load‑testing bundles using traffic data from Grafana, code analysis from GitHub, LLM‑generated scripts, and packaging to S3.
 
 ---
 
@@ -247,7 +247,7 @@ Purpose: StateGraph executor
 # 🧱 Directory Structure
 
 ```
-antigravity/
+./
 ├── app/
 │   ├── domain/
 │   │   ├── entities/
@@ -274,4 +274,4 @@ antigravity/
 
 # ✅ Summary
 
-This Agents.md outlines the entire architecture, agents, responsibilities, DDD structure, clean architecture boundaries, orchestration steps, and expected project layout to implement the **Antigravity Load‑Testing Automation System**.
+This Agents.md outlines the entire architecture, agents, responsibilities, DDD structure, clean architecture boundaries, orchestration steps, and expected project layout to implement the **Load‑Testing Automation System**.

@@ -1,8 +1,10 @@
-# Antigravity Load-Testing Automation System
+# Load-Testing Automation System
 
 This system automates the generation of k6 load-testing bundles using traffic data from Grafana, code analysis from GitHub, and LLM-generated scripts via Groq.
 
 ## Architecture
+
+![Traffic Data & Repository Analysis Pipeline](./assets/loadtest_flow_diagram.png)
 
 The system follows Domain-Driven Design (DDD) and Clean Architecture principles, orchestrated by a StateGraph.
 
@@ -18,6 +20,10 @@ The system follows Domain-Driven Design (DDD) and Clean Architecture principles,
 - Groq API Key
 - GitHub Token
 - AWS Credentials (for S3)
+
+## Demo
+
+<video src="./assets/demo.mov" controls="controls" width="100%" height="auto"></video>
 
 ## Setup
 

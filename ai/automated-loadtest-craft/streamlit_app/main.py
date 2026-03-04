@@ -10,9 +10,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.application.orchestrator import Orchestrator
 
-st.set_page_config(page_title="Antigravity Load Test Automator", page_icon="🚀", layout="wide")
+st.set_page_config(page_title="Load Test Automator", page_icon="🚀", layout="wide")
 
-st.title("🚀 Antigravity Load-Testing Automator")
+st.title("🚀 Load-Testing Automator")
 st.markdown("Automate the generation of k6 load-testing bundles using Grafana traffic data and GitHub repo analysis.")
 
 with st.sidebar:
@@ -24,15 +24,20 @@ col1, col2 = st.columns(2)
 with col1:
     service_name = st.text_input("Service Name", value="payment-service")
     endpoint = st.text_input("Endpoint Path", value="/api/v1/process")
+    http_method = st.selectbox("HTTP Method", ["GET", "POST", "PUT", "DELETE", "PATCH"])
 
 with col2:
-    repo_name = st.text_input("GitHub Repo Name", value="org/payment-service")
+    repo_name = st.text_input("GitHub Repo URL", value="https://github.com/mbhargava88/skills-portfolio/tree/main/golang/catalog-service-grpc-http")
+    branch_override = st.text_input("Branch Override", value="")
 
 if st.button("Generate Load Test Bundle", type="primary"):
     with st.spinner("Orchestrating agents..."):
         try:
             orchestrator = Orchestrator()
-            result = orchestrator.run(service_name, endpoint, repo_name)
+            
+            # Pass None explicitly if branch_override string is empty
+            branch = branch_override.strip() if branch_override.strip() else None
+            result = orchestrator.run(service_name, endpoint, repo_name, branch=branch, http_method=http_method)
             
             if result.get("error"):
                 st.error(f"Workflow failed: {result['error']}")

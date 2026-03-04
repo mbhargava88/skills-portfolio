@@ -4,17 +4,17 @@ from app.domain.entities import TrafficPattern, RepoAnalysis, LoadTestScript, Da
 
 class GrafanaClient(ABC):
     @abstractmethod
-    def fetch_traffic(self, service: str, endpoint: str) -> TrafficPattern:
+    def fetch_traffic(self, service: str, endpoint: str, http_method: str = "POST") -> TrafficPattern:
         pass
 
 class GitHubClient(ABC):
     @abstractmethod
-    def fetch_repo(self, repo_name: str) -> RepoAnalysis:
+    def fetch_repo(self, repo_name: str, branch: Optional[str] = None) -> RepoAnalysis:
         pass
 
 class GroqLLMClient(ABC):
     @abstractmethod
-    def analyze_and_generate(self, traffic: TrafficPattern, repo_analysis: RepoAnalysis) -> tuple[LoadTestScript, Dataset]:
+    def analyze_and_generate(self, traffic: TrafficPattern, repo_analysis: RepoAnalysis, target_endpoint: str) -> tuple[LoadTestScript, Dataset]:
         pass
 
 class S3Client(ABC):

@@ -7,22 +7,33 @@ class FetchTrafficUseCase:
     def __init__(self, grafana_client: GrafanaClient):
         self.grafana_client = grafana_client
 
-    def execute(self, service: str, endpoint: str) -> TrafficPattern:
-        return self.grafana_client.fetch_traffic(service, endpoint)
+    def execute(self, service: str, endpoint: str, http_method: str = "POST") -> TrafficPattern:
+        return self.grafana_client.fetch_traffic(service, endpoint, http_method)
 
 class AnalyzeRepoUseCase:
     def __init__(self, github_client: GitHubClient):
         self.github_client = github_client
 
-    def execute(self, repo_name: str) -> RepoAnalysis:
-        return self.github_client.fetch_repo(repo_name)
+    def execute(self, repo_name: str, branch: str = None) -> RepoAnalysis:
+        return self.github_client.fetch_repo(repo_name, branch)
 
 class GenerateLoadTestUseCase:
     def __init__(self, groq_client: GroqLLMClient):
         self.groq_client = groq_client
 
-    def execute(self, traffic: TrafficPattern, repo_analysis: RepoAnalysis) -> tuple[LoadTestScript, Dataset]:
-        return self.groq_client.analyze_and_generate(traffic, repo_analysis)
+    def execute(self, traffic: TrafficPattern, repo_analysis: RepoAnalysis, target_endpoint: str) -> tuple[LoadTestScript, Dataset]:
+        script, dataset = self.groq_client.analyze_and_generate(traffic, repo_analysis, target_endpoint)
+        
+        try:
+            import jsbeautifier
+            opts = jsbeautifier.default_options()
+            opts.indent_size = 2
+            formatted_script = jsbeautifier.beautify(script.script_content, opts)
+            script.script_content = formatted_script
+        except ImportError:
+            pass # Ignore if jsbeautifier is not installed
+
+        return script, dataset
 
 class BundleArtifactsUseCase:
     def execute(self, script: LoadTestScript, dataset: Dataset, output_dir: str = "/tmp") -> str:

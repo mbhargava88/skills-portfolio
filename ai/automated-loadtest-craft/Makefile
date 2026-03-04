@@ -1,10 +1,13 @@
-.PHONY: build run test clean deploy-minikube
+.PHONY: build run test clean deploy-minikube run-docker
 
 build:
-	docker build -t antigravity-load-test .
+	docker build -t load-test .
 
 run:
 	streamlit run streamlit_app/main.py
+
+run-docker:
+	docker run -p 8501:8501 load-test
 
 test:
 	pytest app/tests

@@ -7,6 +7,7 @@ class TrafficPattern(BaseModel):
     p95_latency_ms: float
     payload_size_bytes: int
     error_rate: float
+    http_method: str = "POST"
     raw_data: Optional[Dict[str, Any]] = None
 
 class EndpointDetails(BaseModel):

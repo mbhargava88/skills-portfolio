@@ -16,6 +16,8 @@ class AgentState(TypedDict):
     service_name: str
     endpoint: str
     repo_name: str
+    branch_name: Annotated[Union[str, None], "Branch override"]
+    http_method: Annotated[str, "HTTP Method"]
     traffic_pattern: Annotated[Union[TrafficPattern, None], "Traffic data"]
     repo_analysis: Annotated[Union[RepoAnalysis, None], "Repo analysis data"]
     load_test_script: Annotated[Union[LoadTestScript, None], "Generated script"]
@@ -42,7 +44,7 @@ class Orchestrator:
         def fetch_traffic_node(state: AgentState):
             try:
                 print(f"Fetching traffic for {state['service_name']}...")
-                traffic = self.fetch_traffic_uc.execute(state['service_name'], state['endpoint'])
+                traffic = self.fetch_traffic_uc.execute(state['service_name'], state['endpoint'], state.get('http_method', 'POST'))
                 return {"traffic_pattern": traffic}
             except Exception as e:
                 return {"error": f"Traffic fetch failed: {str(e)}"}
@@ -52,7 +54,7 @@ class Orchestrator:
             if state.get("error"): return {}
             try:
                 print(f"Fetching repo {state['repo_name']}...")
-                analysis = self.analyze_repo_uc.execute(state['repo_name'])
+                analysis = self.analyze_repo_uc.execute(state['repo_name'], state.get('branch_name'))
                 return {"repo_analysis": analysis}
             except Exception as e:
                 return {"error": f"Repo fetch failed: {str(e)}"}
@@ -62,7 +64,7 @@ class Orchestrator:
             if state.get("error"): return {}
             try:
                 print("Generating load test script...")
-                script, dataset = self.generate_loadtest_uc.execute(state['traffic_pattern'], state['repo_analysis'])
+                script, dataset = self.generate_loadtest_uc.execute(state['traffic_pattern'], state['repo_analysis'], state['endpoint'])
                 return {"load_test_script": script, "dataset": dataset}
             except Exception as e:
                 return {"error": f"Generation failed: {str(e)}"}
@@ -107,11 +109,13 @@ class Orchestrator:
 
         return workflow.compile()
 
-    def run(self, service: str, endpoint: str, repo: str):
+    def run(self, service: str, endpoint: str, repo: str, branch: str = None, http_method: str = "POST"):
         initial_state = AgentState(
             service_name=service, 
             endpoint=endpoint, 
             repo_name=repo,
+            branch_name=branch,
+            http_method=http_method,
             traffic_pattern=None,
             repo_analysis=None,
             load_test_script=None,

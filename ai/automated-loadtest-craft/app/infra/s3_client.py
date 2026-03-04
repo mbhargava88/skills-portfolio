@@ -29,6 +29,28 @@ class S3ClientImpl(S3Client):
                                                             'Key': key},
                                                     ExpiresIn=3600)
             return url
-        except ClientError as e:
-            logging.error(f"S3 Upload Error: {e}")
-            return f"Error uploading to S3: {e}"
+        except Exception as e:
+            if "NoSuchBucket" in str(e):
+                logging.info(f"Bucket {target_bucket} does not exist. Creating it.")
+                try:
+                    region = os.getenv("AWS_REGION", "us-east-1")
+                    if region == "us-east-1":
+                         self.s3_client.create_bucket(Bucket=target_bucket)
+                    else:
+                         self.s3_client.create_bucket(
+                             Bucket=target_bucket,
+                             CreateBucketConfiguration={'LocationConstraint': region}
+                         )
+                    # Retry upload
+                    self.s3_client.upload_file(bundle_path, target_bucket, key)
+                    url = self.s3_client.generate_presigned_url('get_object',
+                                                            Params={'Bucket': target_bucket,
+                                                                    'Key': key},
+                                                            ExpiresIn=3600)
+                    return url
+                except Exception as inner_e:
+                    logging.error(f"Failed to create bucket or upload after creation: {inner_e}")
+                    return f"Error: Could not create bucket or upload: {inner_e}"
+            else:
+                logging.error(f"S3 Connection/Upload Error: {e}")
+                return f"Error connecting or uploading to S3: {e}"
