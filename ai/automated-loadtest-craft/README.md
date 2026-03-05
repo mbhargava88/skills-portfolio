@@ -23,7 +23,7 @@ The system follows Domain-Driven Design (DDD) and Clean Architecture principles,
 
 ## Demo
 
-<video src="./assets/demo.mov" controls="controls" width="100%" height="auto"></video>
+[Watch the Demo Video](./assets/demo.mov)
 
 ## Setup
 
