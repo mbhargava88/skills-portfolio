@@ -1,0 +1,12 @@
+apiVersion: apps.myrepo.dev/v1alpha1
+kind: EphemeralEnv
+metadata:
+  labels:
+    app.kubernetes.io/name: ephemeral-env-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: ephemeralenv-shortlived
+spec:
+  image: nginx:alpine
+  port: 80
+  durationMinutes: 2
+  replicas: 1

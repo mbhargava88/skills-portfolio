@@ -26,5 +26,9 @@ This monorepo contains a collection of projects demonstrating my expertise in **
 
 ## ⚓ Kubernetes
 
-- **[Kubernetes Projects](kubernetes)**: Various Kubernetes manifests and experiments (In Progress).
+| Project | Description | Stack |
+|---------|-------------|-------|
+| **[EphemeralEnv Operator](kubernetes/ephemeral-env-operator)** | Kubebuilder operator managing TTL-bound `EphemeralEnv` custom resources — provisions a Deployment + ClusterIP Service per CR and auto-tears them down once the TTL expires. | Go, Kubebuilder, controller-runtime, Minikube, CRDs |
+
+More Kubernetes projects are in progress — see the [kubernetes](kubernetes) folder.
 
