@@ -1,0 +1,27 @@
+# permissions for end users to edit ephemeralenvs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: ephemeral-env-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: ephemeralenv-editor-role
+rules:
+- apiGroups:
+  - apps.myrepo.dev
+  resources:
+  - ephemeralenvs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.myrepo.dev
+  resources:
+  - ephemeralenvs/status
+  verbs:
+  - get
